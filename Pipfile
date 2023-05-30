@@ -11,6 +11,7 @@ matplotlib = "*"
 seaborn = "*"
 plotly = "*"
 kaggle = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
