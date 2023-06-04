@@ -23,4 +23,8 @@ def pred(dataset_path="./data", output_path="./output"):
 
 
 if __name__ == "__main__":
-    
+    preprocess()
+    visual()
+    train_t_spl()
+    train_m()
+    pred()
