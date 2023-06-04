@@ -1,7 +1,7 @@
-from visualize import visualize
-from train import train_model, train_test_split
-from preprocess import preprocess
-from predict import predict
+from visualize.visualize import visualize
+from train.train import train_model, train_test_split
+from preprocess.preprocess import preprocess
+from predict.predict import predict
 
 def visual(dataset_path="./data", output_path="./output/images", cmd="both"):
     visualize(dataset_path=dataset_path, output_path=output_path, cmd=cmd)
