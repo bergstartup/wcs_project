@@ -4,27 +4,29 @@ from sklearn import preprocessing, linear_model
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
-import gc
-import warnings
+import pickle
 
 # based on the kaggle notebooks:
 # 1. https://www.kaggle.com/code/adnanshikh/listen-to-secrets-in-your-data/notebook
 # 2. https://www.kaggle.com/code/thanakr/first-project-store-sales/notebook
 
+
 # a class for preprocessing data
 class Preprocess:
-    def read_data(self):
-        self.train_data = pd.read_csv("./data/train.csv")
-        self.store_data = pd.read_csv("./data/stores.csv")
+    def read_data(self, dataset_path):
+        self.train_data = pd.read_csv(f"{dataset_path}/train.csv")
+        self.store_data = pd.read_csv(f"{dataset_path}/stores.csv")
         self.holiday_data = pd.read_csv(
-            "./data/holidays_events.csv", index_col="date", parse_dates=["date"]
+            f"{dataset_path}/holidays_events.csv",
+            index_col="date",
+            parse_dates=["date"],
         )  # Set the 'date' column as the index and parse it as dates
-        self.oil_data = pd.read_csv("./data/oil.csv", parse_dates=["date"])
-        self.transaction_data = pd.read_csv("./data/transactions.csv")
-        self.sample = pd.read_csv("./data/sample_submission.csv")
-        self.test_data = pd.read_csv("./data/test.csv")
+        self.oil_data = pd.read_csv(f"{dataset_path}/oil.csv", parse_dates=["date"])
+        self.transaction_data = pd.read_csv(f"{dataset_path}/transactions.csv")
+        self.sample = pd.read_csv(f"{dataset_path}/sample_submission.csv")
+        self.test_data = pd.read_csv(f"{dataset_path}/test.csv")
 
-    def preprocess_data(self):
+    def preprocess_data(self, dataset_path):
         self.process_train = self.train_data.copy()
         self.process_train["date"] = pd.to_datetime(
             self.process_train["date"]
@@ -40,6 +42,13 @@ class Preprocess:
         self.preprocess_total_sales()
         self.preprocess_transactions()
         self.preprocess_holiday_data()
+
+        # store process_train data in a pickle file
+        self.process_train.to_pickle(f"{dataset_path}/process_train.pkl")
+        self.holiday_data.to_pickle(f"{dataset_path}/holiday_data.pkl")
+        self.inputs.to_pickle(f"{dataset_path}/inputs.pkl")
+        self.oil_data.to_pickle(f"{dataset_path}/oil_data.pkl")
+        self.sample.to_pickle(f"{dataset_path}/sample.pkl")
 
     def preprocess_daily_sales(self):
         daily_sale_dict = {}
@@ -366,7 +375,9 @@ class Preprocess:
         self.inputs.dropna(inplace=True)
         self.inputs = self.inputs.set_index("date")  # set index to date
 
-    def visualize(self):
+
+class Visualize:
+    def set_config(self):
         ## Set Plot Parameters
         sns.set(color_codes=True)
         plt.style.use("seaborn-whitegrid")
@@ -387,12 +398,12 @@ class Preprocess:
             legend=False,
         )
 
-        self.visualize_sales_vs_holiday()
-        self.visualize_sales_vs_oil()
+    def visualize_sales_vs_holiday(self, dataset_path, output_path):
+        # the required files should be from the pickle file
+        self.process_train = pd.read_pickle(f"{dataset_path}/process_train.pkl")
+        self.holiday_data = pd.read_pickle(f"{dataset_path}/holiday_data.pkl")
+        self.inputs = pd.read_pickle(f"{dataset_path}/inputs.pkl")
 
-        # visualize sales vs holiday
-
-    def visualize_sales_vs_holiday(self):
         # calculate avg sales of each day from the input data by grouping by date
         avg_sales = self.process_train.groupby("date")["sales"].mean().to_frame()
 
@@ -409,6 +420,7 @@ class Preprocess:
         ].values
         _ = avg_sales["sales"].plot(**self.plot_params)
         _ = plt.plot_date(x_cor, y_cor, color="C3", label="National / Regional Holiday")
+        _ = plt.xlabel("Date")
         _ = plt.ylabel("Avg. Sales")
         _ = plt.title("Avg. Sales At National and Regional Holidays Only")
         _ = plt.legend()
@@ -416,8 +428,7 @@ class Preprocess:
         # save the image to the images folder
         plt.savefig(
             os.path.join(
-                os.path.dirname(os.path.dirname(__file__)),
-                "images",
+                output_path,
                 "avg_sales_at_national_and_regional_holidays_only.png",
             )
         )
@@ -438,6 +449,7 @@ class Preprocess:
         ].values
         _ = avg_sales["sales"].plot(**self.plot_params)
         _ = plt.plot_date(x_cor, y_cor, color="C3", label="Local Holiday")
+        _ = plt.xlabel("Date")
         _ = plt.ylabel("Avg. Sales")
         _ = plt.title("Avg. Sales At Local Holidays Only")
         _ = plt.legend()
@@ -445,8 +457,7 @@ class Preprocess:
         # save the image to the images folder
         plt.savefig(
             os.path.join(
-                os.path.dirname(os.path.dirname(__file__)),
-                "images",
+                output_path,
                 "avg_sales_at_local_holidays_only.png",
             )
         )
@@ -489,8 +500,7 @@ class Preprocess:
         # save the image to the images folder
         plt.savefig(
             os.path.join(
-                os.path.dirname(os.path.dirname(__file__)),
-                "images",
+                output_path,
                 "avg_sales_at_workdays_and_holidays.png",
             )
         )
@@ -498,7 +508,11 @@ class Preprocess:
         # clear the plot
         plt.clf()
 
-    def visualize_sales_vs_oil(self):
+    def visualize_sales_vs_oil(self, dataset_path, output_path):
+        # the required files should be from the pickle file
+        self.process_train = pd.read_pickle(f"{dataset_path}/process_train.pkl")
+        self.oil_data = pd.read_pickle(f"{dataset_path}/oil_data.pkl")
+
         # merge oil data with the input data
         # convert the date column to datetime in oil data
         self.oil_data["date"] = pd.to_datetime(self.oil_data["date"])
@@ -551,8 +565,7 @@ class Preprocess:
         # save the image to the images folder
         plt.savefig(
             os.path.join(
-                os.path.dirname(os.path.dirname(__file__)),
-                "images",
+                output_path,
                 "avg_sales_vs_oil_price.png",
             )
         )
@@ -567,7 +580,12 @@ class Preprocess:
         )
         print("Sales are increasing with the decrease in oil price.")
 
-    def train_test_split(self):
+
+class TrainTestSplit:
+    def train_test_split(self, dataset_path):
+        # read the inputs from the pickle file
+        self.inputs = pd.read_pickle(f"{dataset_path}/inputs.pkl")
+
         self.inputs = self.inputs.sort_index()
         self.y_train = self.inputs.loc[
             "2013-01-01":"2017-08-15", "sales"
@@ -583,21 +601,73 @@ class Preprocess:
         self.x_test = self.x_test.reset_index()
         self.x_test = self.x_test.set_index(["date", "store_nbr", "family"])
 
-    def train_model(self):
+        # store the test and train data in pickle files
+        self.x_train.to_pickle(f"{dataset_path}/x_train.pkl")
+        self.x_test.to_pickle(f"{dataset_path}/x_test.pkl")
+        self.y_train.to_pickle(f"{dataset_path}/y_train.pkl")
+
+class TrainModel:
+    def train_model(self, dataset_path):
+        # read the inputs from the pickle file
+        self.x_train = pd.read_pickle(f"{dataset_path}/x_train.pkl")
+        self.y_train = pd.read_pickle(f"{dataset_path}/y_train.pkl")
+
         self.ln = linear_model.LinearRegression()  # create linear regression model
         self.ln.fit(self.x_train, self.y_train)  # fit model to x_train and y_train
+        
+        # store the model in pickle file
+        pickle.dump(self.ln, open(f"{dataset_path}/lnmodel.pkl", "wb"))
 
-    def predict(self):
+class Predict:
+    def predict(self, dataset_path, output_path):
+        # read the inputs from the pickle file
+        self.x_test = pd.read_pickle(f"{dataset_path}/x_test.pkl")
+        self.sample = pd.read_pickle(f"{dataset_path}/sample.pkl")
+        
+        # load the model from pickle file
+        self.ln = pickle.load(open(f"{dataset_path}/lnmodel.pkl", "rb"))
+
         self.y_pred = self.ln.predict(self.x_test)  # predict y_pred
         self.sample["sales"] = self.y_pred  # set sales column to y_pred
-        self.sample.to_csv("submission.csv", index=False)  # save submission.csv
+        self.sample.to_csv(
+            os.path.join(output_path, "submission.csv"), index=False
+        )  # save the submission file
 
 
-preprocess = Preprocess()
-preprocess.read_data()
-preprocess.preprocess_data()
-preprocess.visualize()
-# preprocess.train_test_split()
-# preprocess.train_model()
-# preprocess.predict()
-gc.collect()
+def preprocess(dataset_path="./data"):
+    preprocess = Preprocess()
+    preprocess.read_data(dataset_path)
+    preprocess.preprocess_data(dataset_path)
+
+
+def visualize(dataset_path="./data", output_path="./output/images", cmd="both"):
+    visualize = Visualize()
+    visualize.set_config()
+
+    if cmd == "holiday":
+        visualize.visualize_sales_vs_holiday(dataset_path, output_path)
+
+    elif cmd == "oil":
+        visualize.visualize_sales_vs_oil(dataset_path, output_path)
+
+    elif cmd == "both":
+        visualize.visualize_sales_vs_holiday(dataset_path, output_path)
+        visualize.visualize_sales_vs_oil(dataset_path, output_path)
+
+def train_test_split(dataset_path="./data"):
+    train_test_split = TrainTestSplit()
+    train_test_split.train_test_split(dataset_path)
+    
+def train_model(dataset_path="./data"):
+    train_model = TrainModel()
+    train_model.train_model(dataset_path)
+    
+def predict(dataset_path="./data", output_path="./output"):
+    predict = Predict()
+    predict.predict(dataset_path, output_path)
+
+preprocess("./data")
+visualize("./data", "./output/images", "both")
+train_test_split("./data")
+train_model("./data")
+predict("./data", "./output")
