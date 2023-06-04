@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -9,10 +9,10 @@ import numpy as np
 import sys
 import json
 import yaml
-from visualize.visualize import visualize
-from train.train import train_model, train_test_split
-from preprocess.preprocess import preprocess
-from predict.predict import predict
+from visualize import visualize
+from train import train_model, train_test_split
+from preprocess import preprocess
+from predict import predict
 
 def visual(dataset_path="./data", output_path="./output/images", cmd="both"):
     visualize(dataset_path=dataset_path, output_path=output_path, cmd=cmd)
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     params = []
     if command == "visual":
         params.append(json.loads(os.environ["DATASET_PATH"]))
-        params.append(json.loads(os.environ["OUTPUT_PATH"]))
+        params.append(json.loads(os.environ["OUTPUT_PATH"])+"output/images")
         params.append(json.loads(os.environ["CMD"]))
         result = visual(*params)
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     elif command == "pred":
         params.append(json.loads(os.environ["DATASET_PATH"]))
-        params.append(json.loads(os.environ["OUTPUT_PATH"]))
+        params.append(json.loads(os.environ["OUTPUT_PATH"])+"output")
         result = pred(*params)
 
     # Print the result with the YAML package

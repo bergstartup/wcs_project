@@ -1,0 +1,7 @@
+name: dataset
+
+# This determine how we access the data. In this example, we use a file, but check the wiki to find all possible kinds.
+access:
+  kind: file
+  # Note that relative paths, per default, are relative to this file.
+  path: ./data

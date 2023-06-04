@@ -1,0 +1,10 @@
+import compute;
+
+on "worker" {
+    let data := new Data{ name := "dataset"};
+    println(prepr(data));
+    println(visual(data,data, "both"));
+    println(train_t_spl(data));
+    println(train_m(data));
+    println(pred(data, data));
+}

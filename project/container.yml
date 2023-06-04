@@ -1,5 +1,5 @@
 name: compute
-version: 1.0.5
+version: 1.0.0
 kind: ecu # Executable Code Unit
 base: python:3.9-slim-buster
 
@@ -8,9 +8,7 @@ entrypoint:
   exec: run.py
 
 description: |
-  Exposes utilities for preprocessing data, training a classifier, 
-  and generating a valid submission file for the Kaggle challenge
-  'Natural Language Processing with Disaster Tweets'.
+  Wscs project 2023 group 11
 
 contributors:
   - Konstantinos
@@ -22,19 +20,14 @@ dependencies:
   - python3-yaml
 
 install:
-  - apt update && apt upgrade -y
-  - pip3 install numpy pandas statsmodels matplotlib seaborn plotly kaggle scikit-learn
+  - pip3 install pyyaml numpy pandas statsmodels matplotlib seaborn plotly kaggle scikit-learn
 
 files:
   - run.py 
-  - modules/predict/predict.py
-  - modules/preprocess/preprocess.py
-  - modules/train/train.py
-  - modules/visualize/vizualize.py
-
-#unpack:
-#  - pipenv install --system --deploy
-#  - python3 -c "import nltk; nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('omw-1.4')"
+  - predict.py
+  - preprocess.py
+  - train.py
+  - visualize.py
 
 actions:
   'visual':
@@ -43,9 +36,9 @@ actions:
         - visual
     input:
       - name: dataset_path
-        type: string
+        type: Data
       - name: output_path
-        type: string
+        type: Data
       - name: cmd
         type: string
     output:
@@ -58,7 +51,7 @@ actions:
         - train_m
     input:
       - name: dataset_path
-        type: string
+        type: Data
     output:
       - type: resultOutput
         name: string
@@ -69,7 +62,7 @@ actions:
         - train_t_spl
     input:
       - name: dataset_path
-        type: string
+        type: Data
     output:
       - type: resultOutput
         name: string
@@ -80,7 +73,7 @@ actions:
         - prepr
     input:
       - name: dataset_path
-        type: string
+        type: Data
     output:
       - type: resultOutput
         name: string
@@ -91,9 +84,9 @@ actions:
         - pred
     input:
       - name: dataset_path
-        type: string
+        type: Data
       - name: output_path
-        type: string
+        type: Data
     output:
       - type: resultOutput
         name: string
