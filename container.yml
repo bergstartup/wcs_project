@@ -1,6 +1,11 @@
 name: compute
-version: 1.0.0
+version: 1.0.5
 kind: ecu # Executable Code Unit
+base: python:3.9-slim-buster
+
+entrypoint:
+  kind: task
+  exec: run.py
 
 description: |
   Exposes utilities for preprocessing data, training a classifier, 
@@ -22,104 +27,73 @@ install:
 
 files:
   - run.py 
+  - modules/predict/predict.py
+  - modules/preprocess/preprocess.py
+  - modules/train/train.py
+  - modules/visualize/vizualize.py
 
 #unpack:
 #  - pipenv install --system --deploy
 #  - python3 -c "import nltk; nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('omw-1.4')"
 
-entrypoint:
-  kind: task
-  exec: run.py
-
 actions:
-  'clean':
+  'visual':
     command:
-      capture: marked
       args:
-        - clean
+        - visual
     input:
-      - type: IntermediateResult
-        name: filepath
+      - name: dataset_path
+        type: string
+      - name: output_path
+        type: string
+      - name: cmd
+        type: string
     output:
-      - type: IntermediateResult
-        name: filepath
+      - type: resultOutput
+        name: string
 
-  'tokenize':
+  'train_m':
     command:
-      capture: marked
       args:
-        - tokenize
+        - train_m
     input:
-      - type: IntermediateResult
-        name: filepath
+      - name: dataset_path
+        type: string
     output:
-      - type: IntermediateResult
-        name: filepath
+      - type: resultOutput
+        name: string
+    
+  'train_t_spl':
+    command:
+      args:
+        - train_t_spl
+    input:
+      - name: dataset_path
+        type: string
+    output:
+      - type: resultOutput
+        name: string
 
-  'remove_stopwords':
+  'prepr':
     command:
-      capture: marked
       args:
-        - remove_stopwords
+        - prepr
     input:
-      - type: IntermediateResult
-        name: filepath
+      - name: dataset_path
+        type: string
     output:
-      - type: IntermediateResult
-        name: filepath
+      - type: resultOutput
+        name: string
 
-  'create_vectors':
+  'pred':
     command:
-      capture: marked
       args:
-        - create_vectors
+        - pred
     input:
-      - type: IntermediateResult
-        name: train_set
-      - type: IntermediateResult
-        name: test_set
+      - name: dataset_path
+        type: string
+      - name: output_path
+        type: string
     output:
-      - type: IntermediateResult
-        name: vectors
-
-  'train_model':
-    command:
-      capture: marked
-      args:
-        - train_model
-    input:
-      - type: IntermediateResult
-        name: filepath_dataset
-      - type: IntermediateResult
-        name: filepath_vectors
-    output:
-      - type: IntermediateResult
-        name: filepath_model
-
-  'create_submission':
-    command:
-      capture: marked
-      args:
-        - create_submission
-    input:
-      - type: IntermediateResult
-        name: filepath_dataset
-      - type: IntermediateResult
-        name: filepath_vectors
-      - type: IntermediateResult
-        name: filepath_model
-    output:
-      - type: IntermediateResult
-        name: filepath_submission
-
-  'generate_bigrams':
-    command:
-      capture: marked
-      args:
-        - generate_bigrams
-    input:
-      - type: IntermediateResult
-        name: filepath
-    output:
-      - type: IntermediateResult
-        name: filepath
+      - type: resultOutput
+        name: string
