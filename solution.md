@@ -6,6 +6,8 @@
 
 The code for our research question is in the `modules` folder and the code for the packages to be run on the Brane Platform are in the `project` folder.
 
+When we open the projects folder we see that we have divided our pipeline into three packages each having it's own `container.yml` and `run.py`. The codes for processing are in the associated folders itself.
+
 The data should be extracted and placed in the `data` folder. It is not unzipped now as we cannot push more than 100MB files in the git push command.
 
 The outputs should ideally have been generated in the `outputs` folder.
