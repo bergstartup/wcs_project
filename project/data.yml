@@ -1,3 +1,4 @@
+# This determines the name, or more accurately, identifier, of the dataset.
 name: dataset
 
 # This determine how we access the data. In this example, we use a file, but check the wiki to find all possible kinds.

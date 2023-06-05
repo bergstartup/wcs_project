@@ -372,9 +372,9 @@ class Preprocess:
         self.inputs = self.inputs.set_index("date")  # set index to date
 
 
-def preprocess(dataset_path="./data"):
+def preprocess(dataset_path="../data"):
     preprocess = Preprocess()
     preprocess.read_data(dataset_path)
     preprocess.preprocess_data(dataset_path)
 
-# preprocess("./data")
+# preprocess("../data")

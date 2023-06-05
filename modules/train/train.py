@@ -45,15 +45,15 @@ class TrainModel:
         pickle.dump(self.ln, open(f"{dataset_path}/lnmodel.pkl", "wb"))
 
 
-def train_test_split(dataset_path="./data"):
+def train_test_split(dataset_path="../data"):
     train_test_split = TrainTestSplit()
     train_test_split.train_test_split(dataset_path)
 
 
-def train_model(dataset_path="./data"):
+def train_model(dataset_path="../data"):
     train_model = TrainModel()
     train_model.train_model(dataset_path)
 
 
-# train_test_split("./data")
-# train_model("./data")
+# train_test_split("../data")
+# train_model("../data")

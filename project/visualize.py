@@ -122,7 +122,7 @@ class Visualize:
         plt.figtext(
             0.5,
             0.01,
-            "Sales are higher at workdays than holidays.",
+            "Sales are higher at holidays than on workdays.",
             wrap=True,
             horizontalalignment="center",
             fontsize=12,

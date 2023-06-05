@@ -212,7 +212,7 @@ class Visualize:
         print("Sales are increasing with the decrease in oil price.")
 
 
-def visualize(dataset_path="./data", output_path="./output/images", cmd="both"):
+def visualize(dataset_path="../data", output_path="../output/images", cmd="both"):
     visualize = Visualize()
     visualize.set_config()
 
@@ -227,4 +227,4 @@ def visualize(dataset_path="./data", output_path="./output/images", cmd="both"):
         visualize.visualize_sales_vs_oil(dataset_path, output_path)
 
 
-# visualize("./data", "./output/images", "both")
+# visualize("../data", "../output/images", "both")

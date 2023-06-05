@@ -21,8 +21,8 @@ class Predict:
             os.path.join(output_path, "submission.csv"), index=False
         )  # save the submission file
 
-def predict(dataset_path="./data", output_path="./output"):
+def predict(dataset_path="../data", output_path="../output"):
     predict = Predict()
     predict.predict(dataset_path, output_path)
 
-# predict("./data", "./output")
+# predict("../data", "../output")

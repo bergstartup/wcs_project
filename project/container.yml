@@ -1,7 +1,6 @@
 name: compute
 version: 1.0.0
 kind: ecu # Executable Code Unit
-base: python:3.9-slim-buster
 
 entrypoint:
   kind: task
@@ -20,6 +19,8 @@ dependencies:
   - python3-yaml
 
 install:
+  - apt update && apt upgrade -y
+  - apt install python3-pip -y
   - pip3 install pyyaml numpy pandas statsmodels matplotlib seaborn plotly kaggle scikit-learn
 
 files:
@@ -42,8 +43,8 @@ actions:
       - name: cmd
         type: string
     output:
-      - type: resultOutput
-        name: string
+      - name: resultOutput
+        type: string
 
   'train_m':
     command:
@@ -53,8 +54,8 @@ actions:
       - name: dataset_path
         type: Data
     output:
-      - type: resultOutput
-        name: string
+      - name: resultOutput
+        type: string
     
   'train_t_spl':
     command:
@@ -64,8 +65,8 @@ actions:
       - name: dataset_path
         type: Data
     output:
-      - type: resultOutput
-        name: string
+      - name: resultOutput
+        type: string
 
   'prepr':
     command:
@@ -75,8 +76,8 @@ actions:
       - name: dataset_path
         type: Data
     output:
-      - type: resultOutput
-        name: string
+      - name: resultOutput
+        type: string
 
   'pred':
     command:
@@ -88,5 +89,5 @@ actions:
       - name: output_path
         type: Data
     output:
-      - type: resultOutput
-        name: string
+      - name: resultOutput
+        type: string

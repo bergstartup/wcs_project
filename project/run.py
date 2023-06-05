@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -28,13 +28,14 @@ def train_t_spl(dataset_path="./data"):
 
 def prepr(dataset_path="./data"):
     preprocess(dataset_path=dataset_path)
+    return "Preprocess function called and returned"
 
 def pred(dataset_path="./data", output_path="./output"):
     predict(dataset_path=dataset_path, output_path=output_path)
+    return "Predict function called and returned"
 
 
 if __name__ == "__main__":
-
     command = sys.argv[1]
     params = []
     if command == "visual":
