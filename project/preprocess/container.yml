@@ -1,0 +1,40 @@
+name: preprocess
+version: 1.0.0
+kind: ecu # Executable Code Unit
+
+entrypoint:
+  kind: task
+  exec: run.py
+
+description: |
+  Wscs project 2023 group 11
+
+contributors:
+  - Konstantinos
+  - Adithya
+  - Sudarsan Sivakumar <appsby12@gmail.com>
+
+dependencies:
+  - python3
+  - python3-yaml
+
+install:
+  - apt update && apt upgrade -y
+  - apt install python3-pip -y
+  - pip3 install pyyaml numpy pandas scikit-learn
+
+files:
+  - run.py 
+  - preprocess.py
+
+actions:
+  'prepr':
+    command:
+      args:
+        - prepr
+    input:
+      - name: dataset_path
+        type: Data
+    output:
+      - name: resultOutput
+        type: string

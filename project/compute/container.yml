@@ -21,31 +21,14 @@ dependencies:
 install:
   - apt update && apt upgrade -y
   - apt install python3-pip -y
-  - pip3 install pyyaml numpy pandas statsmodels matplotlib seaborn plotly kaggle scikit-learn
+  - pip3 install pyyaml pandas scikit-learn
 
 files:
   - run.py 
   - predict.py
-  - preprocess.py
   - train.py
-  - visualize.py
 
 actions:
-  'visual':
-    command:
-      args:
-        - visual
-    input:
-      - name: dataset_path
-        type: Data
-      - name: output_path
-        type: Data
-      - name: cmd
-        type: string
-    output:
-      - name: resultOutput
-        type: string
-
   'train_m':
     command:
       args:
@@ -61,17 +44,6 @@ actions:
     command:
       args:
         - train_t_spl
-    input:
-      - name: dataset_path
-        type: Data
-    output:
-      - name: resultOutput
-        type: string
-
-  'prepr':
-    command:
-      args:
-        - prepr
     input:
       - name: dataset_path
         type: Data
