@@ -1,9 +1,0 @@
-import run;
-
-on "worker" {
-    println(prepr("/data"));
-    println(visual("/data/output"));
-    println(train_t_spl("/data"));
-    println(train_m("/data"));
-    println(pred("/data"));
-}
