@@ -216,6 +216,7 @@ def visualize(dataset_path="./data", output_path="./output/images", cmd="both"):
     visualize = Visualize()
     visualize.set_config()
 
+    os.makedirs(output_path)
     if cmd == "holiday":
         visualize.visualize_sales_vs_holiday(dataset_path, output_path)
 

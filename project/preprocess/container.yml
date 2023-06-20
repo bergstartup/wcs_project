@@ -37,4 +37,4 @@ actions:
         type: Data
     output:
       - name: resultOutput
-        type: string
+        type: IntermediateResult

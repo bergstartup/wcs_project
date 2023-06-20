@@ -7,7 +7,7 @@ import pickle
 # 2. https://www.kaggle.com/code/thanakr/first-project-store-sales/notebook
 
 class TrainTestSplit:
-    def train_test_split(self, dataset_path):
+    def train_test_split(self, dataset_path, result_path):
         # read the inputs from the pickle file
         self.inputs = pd.read_pickle(f"{dataset_path}/inputs.pkl")
 
@@ -27,13 +27,17 @@ class TrainTestSplit:
         self.x_test = self.x_test.set_index(["date", "store_nbr", "family"])
 
         # store the test and train data in pickle files
-        self.x_train.to_pickle(f"{dataset_path}/x_train.pkl")
-        self.x_test.to_pickle(f"{dataset_path}/x_test.pkl")
-        self.y_train.to_pickle(f"{dataset_path}/y_train.pkl")
+        self.x_train.to_pickle(f"{result_path}/x_train.pkl")
+        self.x_test.to_pickle(f"{result_path}/x_test.pkl")
+        self.y_train.to_pickle(f"{result_path}/y_train.pkl")
+
+        # Also copy/paste the sample necessary by the prediction
+        sample = pd.read_pickle(f"{dataset_path}/sample.pkl")
+        sample.to_pickle(f"{result_path}/sample.pkl")
 
 
 class TrainModel:
-    def train_model(self, dataset_path):
+    def train_model(self, dataset_path, result_path):
         # read the inputs from the pickle file
         self.x_train = pd.read_pickle(f"{dataset_path}/x_train.pkl")
         self.y_train = pd.read_pickle(f"{dataset_path}/y_train.pkl")
@@ -42,17 +46,17 @@ class TrainModel:
         self.ln.fit(self.x_train, self.y_train)  # fit model to x_train and y_train
 
         # store the model in pickle file
-        pickle.dump(self.ln, open(f"{dataset_path}/lnmodel.pkl", "wb"))
+        pickle.dump(self.ln, open(f"{result_path}/lnmodel.pkl", "wb"))
 
 
-def train_test_split(dataset_path="./data"):
+def train_test_split(dataset_path="./data", result_path="/result"):
     train_test_split = TrainTestSplit()
-    train_test_split.train_test_split(dataset_path)
+    train_test_split.train_test_split(dataset_path, result_path)
 
 
-def train_model(dataset_path="./data"):
+def train_model(dataset_path="./data", result_path="/result"):
     train_model = TrainModel()
-    train_model.train_model(dataset_path)
+    train_model.train_model(dataset_path, result_path)
 
 
 # train_test_split("./data")

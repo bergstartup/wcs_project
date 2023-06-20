@@ -32,13 +32,12 @@ actions:
     command:
       args:
         - visual
+      capture: prefixed
     input:
       - name: dataset_path
-        type: Data
-      - name: output_path
-        type: Data
+        type: IntermediateResult
       - name: cmd
         type: string
     output:
       - name: resultOutput
-        type: string
+        type: IntermediateResult

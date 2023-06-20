@@ -35,10 +35,10 @@ actions:
         - train_m
     input:
       - name: dataset_path
-        type: Data
+        type: IntermediateResult
     output:
       - name: resultOutput
-        type: string
+        type: IntermediateResult
     
   'train_t_spl':
     command:
@@ -46,20 +46,20 @@ actions:
         - train_t_spl
     input:
       - name: dataset_path
-        type: Data
+        type: IntermediateResult
     output:
       - name: resultOutput
-        type: string
+        type: IntermediateResult
 
   'pred':
     command:
       args:
         - pred
     input:
+      - name: model_path
+        type: IntermediateResult
       - name: dataset_path
-        type: Data
-      - name: output_path
-        type: Data
+        type: IntermediateResult
     output:
       - name: resultOutput
-        type: string
+        type: IntermediateResult
