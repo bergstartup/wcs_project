@@ -20,4 +20,4 @@ if __name__ == "__main__":
         result = prepr(*params)
 
     # Print the result with the YAML package
-    print(yaml.dump({ "resultOutput": result }))
+    # print(yaml.dump({ "resultOutput": result }))

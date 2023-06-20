@@ -22,7 +22,7 @@ class Preprocess:
         self.sample = pd.read_csv(f"{dataset_path}/sample_submission.csv")
         self.test_data = pd.read_csv(f"{dataset_path}/test.csv")
 
-    def preprocess_data(self, dataset_path):
+    def preprocess_data(self, result_path):
         self.process_train = self.train_data.copy()
         self.process_train["date"] = pd.to_datetime(
             self.process_train["date"]
@@ -40,11 +40,11 @@ class Preprocess:
         self.preprocess_holiday_data()
 
         # store process_train data in a pickle file
-        self.process_train.to_pickle(f"{dataset_path}/process_train.pkl")
-        self.holiday_data.to_pickle(f"{dataset_path}/holiday_data.pkl")
-        self.inputs.to_pickle(f"{dataset_path}/inputs.pkl")
-        self.oil_data.to_pickle(f"{dataset_path}/oil_data.pkl")
-        self.sample.to_pickle(f"{dataset_path}/sample.pkl")
+        self.process_train.to_pickle(f"{result_path}/process_train.pkl")
+        self.holiday_data.to_pickle(f"{result_path}/holiday_data.pkl")
+        self.inputs.to_pickle(f"{result_path}/inputs.pkl")
+        self.oil_data.to_pickle(f"{result_path}/oil_data.pkl")
+        self.sample.to_pickle(f"{result_path}/sample.pkl")
 
     def preprocess_daily_sales(self):
         daily_sale_dict = {}
@@ -372,9 +372,9 @@ class Preprocess:
         self.inputs = self.inputs.set_index("date")  # set index to date
 
 
-def preprocess(dataset_path="./data"):
+def preprocess(dataset_path="./data", result_path="/result"):
     preprocess = Preprocess()
     preprocess.read_data(dataset_path)
-    preprocess.preprocess_data(dataset_path)
+    preprocess.preprocess_data(result_path)
 
 # preprocess("./data")

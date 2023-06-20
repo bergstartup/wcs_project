@@ -15,7 +15,7 @@ if __name__ == "__main__":
     params = []
     if command == "visual":
         params.append(json.loads(os.environ["DATASET_PATH"]))
-        params.append(json.loads(os.environ["OUTPUT_PATH"])+"output/images")
+        params.append("/result/output/images")
         params.append(json.loads(os.environ["CMD"]))
         result = visual(*params)
 

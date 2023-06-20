@@ -15,8 +15,8 @@ def train_t_spl(dataset_path="./data"):
     train_test_split(dataset_path=dataset_path)
     return "Train_test_split function called and returned"
 
-def pred(dataset_path="./data", output_path="./output"):
-    predict(dataset_path=dataset_path, output_path=output_path)
+def pred(model_path="./model", dataset_path="./data"):
+    predict(model_path=model_path, dataset_path=dataset_path)
     return "Predict function called and returned"
 
 
@@ -32,9 +32,9 @@ if __name__ == "__main__":
         result = train_t_spl(*params)
         
     elif command == "pred":
+        params.append(json.loads(os.environ["MODEL_PATH"]))
         params.append(json.loads(os.environ["DATASET_PATH"]))
-        params.append(json.loads(os.environ["OUTPUT_PATH"])+"output")
         result = pred(*params)
 
     # Print the result with the YAML package
-    print(yaml.dump({ "resultOutput": result }))
+    # print(yaml.dump({ "resultOutput": result }))
